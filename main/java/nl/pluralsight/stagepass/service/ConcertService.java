@@ -20,7 +20,7 @@ public class ConcertService {
     }
 
     public Concert getConcertById(Long id) {
-        return concertRepository.findById(id);
+        return concertRepository.findById(id).orElseThrow(() -> new RuntimeException("Concert with id " + id + " not found"));
     }
 
     public Concert createConcert(Concert concert) {
@@ -28,7 +28,7 @@ public class ConcertService {
     }
 
     public Concert updateConcert(Long id, Concert updatedConcert) {
-        return concertRepository.findById(id).map(existing -> {
+        Concert existing = getConcertById(id);
             existing.setTitle(updatedConcert.getTitle());
             existing.setDate(updatedConcert.getDate());
             existing.setArtist(updatedConcert.getArtist());
@@ -37,7 +37,7 @@ public class ConcertService {
             existing.setAvailableSeats(updatedConcert.getAvailableSeats());
             existing.setTicketPrice(updatedConcert.getTicketPrice());
             return concertRepository.save(existing);
-        });
+
     }
 
     public boolean deleteConcert(Long id) {
