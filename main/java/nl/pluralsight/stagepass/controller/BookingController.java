@@ -43,19 +43,11 @@ public class BookingController {
         return ResponseEntity.ok(created);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Booking> updateBooking(
-            @PathVariable Long id,
-            @RequestBody Booking booking) {
-        Booking updated = bookingService.updateBooking(id, booking);
-
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> cancelBooking(@PathVariable Long id) {
-        if (bookingService.cancelBooking(id)) {
-            return ResponseEntity.ok().build();
+        bookingService.cancelBooking(id);
+        return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
     }
-}
+

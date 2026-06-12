@@ -20,28 +20,25 @@ public class VenueService {
         return venueRepository.findAll();
     }
 
-    public Optional<Venue> getVenueById(Long id) {
-        return venueRepository.findById(id);
+    public Venue getVenueById(Long id) {
+        return venueRepository.findById(id).orElseThrow(() -> new RuntimeException("Venue with id " + id + " not found!"));
     }
 
     public Venue createVenue(Venue venue) {
         return venueRepository.save(venue);
     }
 
-    public Optional<Venue> updateVenue(Long id, Venue updatedVenue) {
-        return venueRepository.findById(id).map(existing -> {
+    public Venue updateVenue(Long id, Venue updatedVenue) {
+        Venue existing = getVenueById(id);
             existing.setName(updatedVenue.getName());
             existing.setCity(updatedVenue.getCity());
             existing.setCapacity(updatedVenue.getCapacity());
             return venueRepository.save(existing);
-        });
+
     }
 
-    public boolean deleteVenue(Long id) {
-        if (venueRepository.existsById(id)) {
-            venueRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteVenue(Long id) {
+        venueRepository.deleteById(id);
     }
-}
+    }
+

@@ -6,6 +6,7 @@ import nl.pluralsight.stagepass.repository.BookingRepository;
 import nl.pluralsight.stagepass.repository.ConcertRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,12 +27,14 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking getBookingById(Long id) {
-        return bookingRepository.findById(id);
+    public Booking getBookingById( Long id) {
+
+        return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
     }
 
     public List<Booking> getBookingsByConcert(Long concertId) {
-        return bookingRepository.findAll();
+
+        return bookingRepository.findByConcertId(concertId);
     }
 
     @Transactional
@@ -49,12 +52,9 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public boolean cancelBooking(Long id) {
-        if (bookingRepository.existsById(id)) {
-            bookingRepository.deleteById(id);
-            return true;
+    public void cancelBooking(Long id) {
+        bookingRepository.deleteById(id);
+
         }
-        return false;
     }
 
-}
