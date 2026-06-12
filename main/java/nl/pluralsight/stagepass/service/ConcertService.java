@@ -40,12 +40,10 @@ public class ConcertService {
 
     }
 
-    public boolean deleteConcert(Long id) {
-        if (concertRepository.existsById(id)) {
+    public void deleteConcert(Long id) {
+
             concertRepository.deleteById(id);
-            return true;
-        }
-        return false;
+
     }
 
 
